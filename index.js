@@ -1,7 +1,9 @@
 (async () => {
   const modelpath = './weights';
   const face = await Promise.all([
+    faceapi.loadSsdMobilenetv1Model(modelpath),
     faceapi.loadTinyFaceDetectorModel(modelpath),
+    faceapi.loadMtcnnModel(modelpath),
     faceapi.loadFaceLandmarkModel(modelpath),
     faceapi.loadFaceLandmarkTinyModel(modelpath),
     faceapi.loadFaceRecognitionModel(modelpath),
@@ -24,11 +26,12 @@
     faceapi.detectSingleFace(
       video,
       options
-    ).withFaceLandmarks()
-     .withFaceDescriptor()
-     .withFaceExpressions()
-     .then((result) => {
-       console.log(result);
+    )
+    .withFaceLandmarks()
+    .withFaceDescriptor()
+    .withFaceExpressions()
+    .then((result) => {
+      console.log(result);
 
        const dims = faceapi.matchDimensions(
          canvas,
@@ -55,7 +58,7 @@
          canvas,
          resized
        );
-     });
+     }).catch((err) => {});
 
     requestAnimationFrame(render);
   }
