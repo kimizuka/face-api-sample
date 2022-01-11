@@ -1,6 +1,13 @@
 (async () => {
   const modelpath = './weights';
-  const face = await Promise.all([
+  const options = new faceapi.TinyFaceDetectorOptions();
+  const stream = await navigator.mediaDevices.getUserMedia({ video: {
+    facingMode: 'user'
+  }});
+  const video = document.querySelector('video');
+  const canvas = document.querySelector('canvas');
+
+  await Promise.all([
     faceapi.loadSsdMobilenetv1Model(modelpath),
     faceapi.loadTinyFaceDetectorModel(modelpath),
     faceapi.loadMtcnnModel(modelpath),
@@ -9,16 +16,8 @@
     faceapi.loadFaceRecognitionModel(modelpath),
     faceapi.loadFaceExpressionModel(modelpath)
   ]);
-  const options = new faceapi.TinyFaceDetectorOptions();
-  const stream = await navigator.mediaDevices.getUserMedia({ video: {
-    facingMode: 'user'
-  }});
-  const video = document.querySelector('video');
 
   video.srcObject = stream;
-
-  const canvas = document.querySelector('canvas');
-  const ctx = canvas.getContext('2d');
 
   render();
 
